@@ -408,26 +408,30 @@ public class CompiledVisitor extends AstVisitor {
 	public void visit(ValueDirective node) throws IOException, ParseException {
 		boolean nofilter = node.isNoFilter();
 		String code = popExpressionCode();
+
+        builder.append("    $code = (" + code + ");\n");
+        code = "$code";
+
 		Class<?> returnType = popExpressionReturnType();
 		Map<String, Class<?>> variableTypes = popExpressionVariableTypes();
 		getVariables.addAll(variableTypes.keySet());
 		if (Template.class.isAssignableFrom(returnType)) {
-			if (! StringUtils.isNamed(code)) {
-				code = "(" + code + ")";
-			}
+//			if (! StringUtils.isNamed(code)) {
+//				code = "(" + code + ")";
+//			}
 			builder.append("	if (");
 			builder.append(code);
-			builder.append(" != null) ");
-			builder.append(code);
-			builder.append(".render($output);\n");
+			builder.append(" != null) (");
+			builder.append('(').append(Template.class.getName()).append(')').append(code);
+			builder.append(").render($output);\n");
 		} else if (nofilter && Resource.class.isAssignableFrom(returnType)) {
-			if (! StringUtils.isNamed(code)) {
-				code = "(" + code + ")";
-			}
+//			if (! StringUtils.isNamed(code)) {
+//				code = "(" + code + ")";
+//			}
 			builder.append("	");
 			builder.append(IOUtils.class.getName());
 			builder.append(".copy(");
-			builder.append(code);
+            builder.append("((").append(Resource.class.getName()).append(')').append(code).append(')');
 			if (stream) {
 				builder.append(".openStream()");
 			} else {
@@ -436,9 +440,9 @@ public class CompiledVisitor extends AstVisitor {
 			builder.append(", $output);\n");
 		} else {
 			if (Object.class.equals(returnType)) {
-				if (! StringUtils.isNamed(code)) {
-					code = "(" + code + ")";
-				}
+//				if (! StringUtils.isNamed(code)) {
+//					code = "(" + code + ")";
+//				}
 				builder.append("	if (");
 				builder.append(code);
 				builder.append(" instanceof ");
@@ -466,15 +470,15 @@ public class CompiledVisitor extends AstVisitor {
 					}
 					builder.append(", $output);\n	}");
 				} else {
-					code = "(" + code + " instanceof " + Resource.class.getName() + " ? " 
-							+ IOUtils.class.getName() + ".readToString(((" + Resource.class.getName() + ")" 
+					code = "(" + code + " instanceof " + Resource.class.getName() + " ? "
+							+ IOUtils.class.getName() + ".readToString(((" + Resource.class.getName() + ")"
 							+ code + ").openReader()) : " + code + ")";
 				}
 				builder.append(" else {\n");
 			} else if (Resource.class.isAssignableFrom(returnType)) {
-				if (! StringUtils.isNamed(code)) {
-					code = "(" + code + ")";
-				}
+//				if (! StringUtils.isNamed(code)) {
+//					code = "(" + code + ")";
+//				}
 				code = "(" + code + " == null ? null : " + IOUtils.class.getName() + ".readToString(" + code + ".openReader()))";
 			}
 			getVariables.add(formatterVariable);
@@ -545,13 +549,13 @@ public class CompiledVisitor extends AstVisitor {
 			defVariableTypes.add(clazz);
 		}
 	}
-	
+
 	private Class<?> checkVar(Class<?> clazz, String var, int offset) throws IOException, ParseException {
 		Class<?> cls = types.get(var);
-		if (cls != null && ! cls.equals(clazz) 
-				&& ! cls.isAssignableFrom(clazz) 
+		if (cls != null && ! cls.equals(clazz)
+				&& ! cls.isAssignableFrom(clazz)
 				&& ! clazz.isAssignableFrom(cls)) {
-			throw new ParseException("Defined different type variable " 
+			throw new ParseException("Defined different type variable "
 				+ var + ", conflict types: " + cls.getCanonicalName() + ", " + clazz.getCanonicalName() + ".", offset);
 		}
 		if (cls != null && clazz.isAssignableFrom(cls)) {
@@ -583,7 +587,7 @@ public class CompiledVisitor extends AstVisitor {
 			builder.append(");\n");
 		}
 	}
-	
+
 	@Override
 	public boolean visit(IfDirective node) throws IOException, ParseException {
 		String code = popExpressionCode();
@@ -636,7 +640,7 @@ public class CompiledVisitor extends AstVisitor {
 			} else if (Map.class.isAssignableFrom(returnType)) {
 				clazz = Map.Entry.class;
 			} else if (Collection.class.isAssignableFrom(returnType)) {
-				clazz = types.get(exprName + ":0"); // Collection<T>泛型 
+				clazz = types.get(exprName + ":0"); // Collection<T>泛型
 			}
 			if (clazz == null) {
 				if (defaultVariableType == null) {
@@ -877,6 +881,8 @@ public class CompiledVisitor extends AstVisitor {
 				defVariableTypes.add(type);
 			}
 		}
+        declare.append("	Object $code = null;\n");
+
 		StringBuilder funtionFileds = new StringBuilder();
 		StringBuilder functionInits = new StringBuilder();
 		for (Map.Entry<Class<?>, Object> function : functions.entrySet()) {
