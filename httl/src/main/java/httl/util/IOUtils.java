@@ -15,6 +15,8 @@
  */
 package httl.util;
 
+import httl.Resource;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,6 +66,10 @@ public class IOUtils {
 			reader.close();
 		}
 	}
+
+    public static String readToString(Resource resource) throws IOException {
+        return (resource != null) ? readToString(resource.openReader()) : null;
+    }
 
 	public static String readToString(Reader reader) throws IOException {
 		try {

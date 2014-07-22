@@ -479,7 +479,7 @@ public class CompiledVisitor extends AstVisitor {
 //				if (! StringUtils.isNamed(code)) {
 //					code = "(" + code + ")";
 //				}
-				code = "(" + code + " == null ? null : " + IOUtils.class.getName() + ".readToString(" + code + ".openReader()))";
+				code = "(" + IOUtils.class.getName() + ".readToString((" + Resource.class.getName() + ")" + code + "))";
 			}
 			getVariables.add(formatterVariable);
 			String key = getTextPart(node.getExpression().toString(), null, true);
