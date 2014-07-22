@@ -10,14 +10,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
+	<!--<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
-	</parent>
-	<groupId>com.github.httl</groupId>
+	</parent>-->
+    <parent>
+        <groupId>softmotions</groupId>
+        <artifactId>softmotions-base-pom</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jaxion_repository</id>
+            <url>http://jaxion.org/mvn/</url>
+        </repository>
+    </repositories>
 	<artifactId>httl-parent</artifactId>
-	<version>1.0.11</version>
+	<version>1.0.11-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>HTTL-Parent</name>
 	<description>Hyper Text Template Language and Engine.</description>
@@ -48,21 +67,21 @@
 		<name>HTTL</name>
 		<url>http://httl.github.io</url>
 	</organization>
-	<repositories>
+	<!--<repositories>
 		<repository>
 			<id>httl-repository</id>
 			<name>Httl Repository</name>
 			<url>http://httl.github.io/maven</url>
 		</repository>
-	</repositories>
+	</repositories>-->
 	<scm>
-		<url>http://httl.github.io</url>
-		<connection>scm:git:https://github.com/httl/httl.git</connection>
-		<developerConnection>scm:git:git@github.com:httl/httl.git</developerConnection>
+		<url>https://github.com/Softmotions/httl</url>
+		<connection>scm:git:https://github.com/Softmotions/httl.git</connection>
+		<developerConnection>scm:git:git@github.com:Softmotions/httl.git</developerConnection>
 	</scm>
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/httl/httl/issues</url>
+		<url>https://github.com/Softmotions/httl/issues</url>
 	</issueManagement>
 	<mailingLists>
 		<mailingList>
@@ -83,25 +102,75 @@
 			<timezone>+8</timezone>
 		</developer>
 	</developers>
-	<profiles>
-		<profile>
-			<id>gpg</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <forkMode>always</forkMode>
+                    <argLine>-Xms128m -Xmx2028m -XX:PermSize=64m -XX:MaxPermSize=256m</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>true</addMavenDescriptor>
+                        <index>true</index>
+                        <manifest>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!--<plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadoc</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <show>public</show>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <links>
+                        <link>http://docs.oracle.com/javase/6/docs/api</link>
+                    </links>
+                </configuration>
+            </plugin>-->
+        </plugins>
+    </build>
 </project>
