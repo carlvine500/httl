@@ -459,6 +459,8 @@ public abstract class Engine {
 	 */
 	public abstract Template parseTemplate(String source, Object args) throws ParseException;
 
+	public abstract Template parseTemplateByName(String name, Locale locale, String encoding, Object args) throws IOException, ParseException;
+
 	/**
 	 * Create context map.
 	 * 

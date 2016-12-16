@@ -239,6 +239,10 @@ public class DefaultEngine extends Engine {
 		return template;
 	}
 
+	public Template parseTemplateByName(String name, Locale locale, String encoding, Object args) throws IOException, ParseException {
+		return parseTemplate(null, name, locale, encoding, args);
+	}
+
 	// Parse the template. (No cache)
 	private Template parseTemplate(Resource resource, String name, Locale locale, String encoding, Object args) throws IOException, ParseException {
 		if (resource == null) {
