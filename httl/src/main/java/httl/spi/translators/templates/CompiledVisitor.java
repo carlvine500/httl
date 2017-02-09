@@ -100,6 +100,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1081,6 +1082,8 @@ public class CompiledVisitor extends AstVisitor {
 		return buf.toString();
 	}
 
+	private static final Charset UTF8_CS = Charset.forName("UTF-8");
+
 	private String getTemplateClassName(Resource resource, Node node, boolean stream) {
 		String name = resource.getName();
 		String encoding = resource.getEncoding();
@@ -1098,7 +1101,8 @@ public class CompiledVisitor extends AstVisitor {
 			buf.append("_");
 			buf.append(engineName);
 		}
-		if (StringUtils.isNotEmpty(encoding)) {
+		if (StringUtils.isNotEmpty(encoding)
+			&& UTF8_CS.compareTo(Charset.forName(encoding)) != 0) {
 			buf.append("_");
 			buf.append(encoding);
 		}
@@ -1106,11 +1110,10 @@ public class CompiledVisitor extends AstVisitor {
 			buf.append("_");
 			buf.append(locale);
 		}
-		if (lastModified > 0) {
-			buf.append("_");
-			buf.append(lastModified);
-		}
-		buf.append(stream ? "_stream" : "_writer");
+		buf.append(stream ? "_s_" : "_w_");
+		// Append lastModified as suffix of class name
+		// It fill be used in JdkCompiler
+		buf.append(lastModified > 0 ? lastModified : 0);
 		return TEMPLATE_CLASS_PREFIX + StringUtils.getVaildName(buf.toString());
 	}
 	
