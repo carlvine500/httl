@@ -39,7 +39,7 @@
         </repository>
     </repositories>
 	<artifactId>httl-parent</artifactId>
-	<version>1.0.11-SNAPSHOT</version>
+	<version>1.0.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>HTTL-Parent</name>
 	<description>Hyper Text Template Language and Engine.</description>
