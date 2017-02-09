@@ -40,7 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.DiagnosticListener;
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
@@ -63,8 +65,6 @@ public class JdkCompiler extends AbstractCompiler {
 
 	private final JavaCompiler compiler;
 
-	private final DiagnosticCollector<JavaFileObject> diagnosticCollector;
-	
 	private final StandardJavaFileManager standardJavaFileManager;
 
 	private final ClassLoaderImpl classLoader;
@@ -82,8 +82,23 @@ public class JdkCompiler extends AbstractCompiler {
 		if (compiler == null) {
 			throw new IllegalStateException("Can not get system java compiler. Please run with JDK (NOT JVM), or configure the httl.properties: compiler=httl.spi.compilers.JavassistCompiler, and add javassist.jar.");
 		}
-		diagnosticCollector = new DiagnosticCollector<JavaFileObject>();
-		standardJavaFileManager = compiler.getStandardFileManager(diagnosticCollector, null, null);
+		standardJavaFileManager = compiler.getStandardFileManager(new DiagnosticListener<JavaFileObject>() {
+			public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
+				switch (diagnostic.getKind()) {
+					case ERROR:
+						logger.error(diagnostic.toString());
+						break;
+					case MANDATORY_WARNING:
+					case WARNING:
+					case NOTE:
+					case OTHER:
+						if (logger.isDebugEnabled() || logger.isTraceEnabled()) {
+							logger.debug(diagnostic.getKind().toString() + ' ' + diagnostic.toString());
+						}
+						break;
+				}
+			}
+		}, null, null);
 		ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
 		try {
 			contextLoader.loadClass(JdkCompiler.class.getName());
@@ -179,13 +194,15 @@ public class JdkCompiler extends AbstractCompiler {
 			int i = name.lastIndexOf('.');
 			String packageName = i < 0 ? "" : name.substring(0, i);
 			String className = i < 0 ? name : name.substring(i + 1);
+			DiagnosticCollector<JavaFileObject> diagnosticCollector = new DiagnosticCollector<>();
 			JavaFileObjectImpl javaFileObject = new JavaFileObjectImpl(className, sourceCode);
 			javaFileManager.putFileForInput(StandardLocation.SOURCE_PATH, packageName, 
 											className + ClassUtils.JAVA_EXTENSION, javaFileObject);
-			Boolean result = compiler.getTask(null, javaFileManager, diagnosticCollector, options, 
-											  null, Arrays.asList(new JavaFileObject[]{javaFileObject})).call();
-			if (result == null || ! result.booleanValue()) {
-				throw new IllegalStateException("Compilation failed. class: " + name + ", diagnostics: " + diagnosticCollector.getDiagnostics());
+			Boolean result = compiler.getTask(null, javaFileManager, diagnosticCollector, options,
+											  null, Collections.singletonList(javaFileObject)).call();
+			if (result == null || !result) {
+				throw new IllegalStateException("Compilation failed. class: " + name +
+												", diagnostics: " + diagnosticCollector.getDiagnostics());
 			}
 			return classLoader.loadClass(name);
 		}
