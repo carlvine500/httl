@@ -195,6 +195,16 @@ public class JdkCompiler extends AbstractCompiler {
     }
 
     private Class<?> doCompile(String name, String sourceCode, List<String> options) throws Exception {
+
+        String strippedName = stripClassTimestamp(name);
+        // to avoid ts associated leaks we use one classloader per class
+        TemplateClassLoader cl = qname2Loader.get(strippedName);
+        if (cl != null && name.equals(cl.qualifiedClassName)) {
+            try {
+                return cl.loadClass(name);
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
         int i = name.lastIndexOf('.');
         String packageName = i < 0 ? "" : name.substring(0, i);
         String className = i < 0 ? name : name.substring(i + 1);
@@ -207,7 +217,7 @@ public class JdkCompiler extends AbstractCompiler {
             throw new IllegalStateException("Compilation failed. class: " + name +
                                             ", diagnostics: " + dc.getDiagnostics());
         }
-        TemplateClassLoader cl = qname2Loader.get(stripClassTimestamp(name));
+        cl = qname2Loader.get(strippedName);
         if (cl == null) {
             throw new IllegalStateException("Classloader for: " + name + " is not found");
         }
@@ -218,8 +228,11 @@ public class JdkCompiler extends AbstractCompiler {
 
         private final JavaFileObjectImpl jfo;
 
+        private final String qualifiedClassName;
+
         private TemplateClassLoader(String qualifiedClassName, Kind kind) {
             super(parentClassLoader);
+            this.qualifiedClassName = qualifiedClassName;
             this.jfo = new JavaFileObjectImpl(qualifiedClassName, kind);
         }
 
@@ -241,10 +254,10 @@ public class JdkCompiler extends AbstractCompiler {
         @Override
         public InputStream getResourceAsStream(final String name) {
             if (name.endsWith(ClassUtils.CLASS_EXTENSION)) {
-                String qualifiedClassName = name.substring(0, name.length() - ClassUtils.CLASS_EXTENSION.length()).replace('/', '.');
-                TemplateClassLoader slot = qname2Loader.get(qualifiedClassName);
+                String cn = name.substring(0, name.length() - ClassUtils.CLASS_EXTENSION.length()).replace('/', '.');
+                TemplateClassLoader slot = qname2Loader.get(cn);
                 if (slot == null) {
-                    slot = qname2Loader.get(stripClassTimestamp(qualifiedClassName));
+                    slot = qname2Loader.get(stripClassTimestamp(cn));
                 }
                 if (slot != null) {
                     return new UnsafeByteArrayInputStream(slot.jfo.getByteCode());
