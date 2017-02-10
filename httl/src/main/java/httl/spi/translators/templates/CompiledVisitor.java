@@ -1110,9 +1110,10 @@ public class CompiledVisitor extends AstVisitor {
 			buf.append("_");
 			buf.append(locale);
 		}
-		buf.append(stream ? "_s_" : "_w_");
+		buf.append(stream ? "_s" : "_w");
 		// Append lastModified as suffix of class name
 		// It fill be used in JdkCompiler
+		buf.append("_ts");
 		buf.append(lastModified > 0 ? lastModified : 0);
 		return TEMPLATE_CLASS_PREFIX + StringUtils.getVaildName(buf.toString());
 	}
