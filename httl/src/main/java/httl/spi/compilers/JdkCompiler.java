@@ -228,7 +228,7 @@ public class JdkCompiler extends AbstractCompiler {
             try {
                 return super.findClass(qualifiedClassName);
             } catch (ClassNotFoundException e) {
-                byte[] bytes = jfo.getByteCode();
+                byte[] bytes = qname2Loader.get(stripClassTimestamp(qualifiedClassName)).jfo.getByteCode();
                 try {
                     saveBytecode(qualifiedClassName, bytes);
                 } catch (IOException e2) {
