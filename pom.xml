@@ -10,16 +10,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<!--<parent>
+	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
-	</parent>-->
+	</parent>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Snapshots</name>
+			<url>http://maven.bizsaas.tech/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+    <!--
     <parent>
         <groupId>softmotions</groupId>
         <artifactId>softmotions-base-pom</artifactId>
         <version>1.1.0</version>
     </parent>
+    -->
+    <!-- 
     <repositories>
         <repository>
             <id>central</id>
@@ -38,12 +48,13 @@
             </snapshots>
         </repository>
     </repositories>
+    -->
 	<artifactId>httl-parent</artifactId>
 	<version>1.0.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>HTTL-Parent</name>
 	<description>Hyper Text Template Language and Engine.</description>
-	<url>http://httl.github.io</url>
+	<!--<url>http://httl.github.io</url>-->
 	<inceptionYear>2012</inceptionYear>
 	<properties>
 		<updateReleaseInfo>true</updateReleaseInfo>
@@ -66,10 +77,10 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
-	<organization>
+	<!--<organization>
 		<name>HTTL</name>
 		<url>http://httl.github.io</url>
-	</organization>
+	</organization>-->
 	<!--<repositories>
 		<repository>
 			<id>httl-repository</id>
