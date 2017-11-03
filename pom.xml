@@ -20,7 +20,14 @@
         <artifactId>softmotions-base-pom</artifactId>
         <version>1.1.0</version>
     </parent>
-    <repositories>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Snapshots</name>
+			<url>http://maven.bizsaas.tech/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+    <!--<repositories>
         <repository>
             <id>central</id>
             <name>Maven Repository Switchboard</name>
@@ -37,13 +44,13 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-    </repositories>
+    </repositories>-->
 	<artifactId>httl-parent</artifactId>
 	<version>1.0.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>HTTL-Parent</name>
 	<description>Hyper Text Template Language and Engine.</description>
-	<url>http://httl.github.io</url>
+	<!-- <url>http://httl.github.io</url> -->
 	<inceptionYear>2012</inceptionYear>
 	<properties>
 		<updateReleaseInfo>true</updateReleaseInfo>
@@ -68,7 +75,7 @@
 	</licenses>
 	<organization>
 		<name>HTTL</name>
-		<url>http://httl.github.io</url>
+		<!-- <url>http://httl.github.io</url> -->
 	</organization>
 	<!--<repositories>
 		<repository>

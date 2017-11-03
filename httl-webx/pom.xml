@@ -26,7 +26,7 @@
 	<packaging>jar</packaging>
 	<name>HTTL-WebX</name>
 	<description>HTTL WebX Integration.</description>
-	<url>http://httl.github.io</url>
+	<!-- <url>http://httl.github.io</url> -->
 	<inceptionYear>2012</inceptionYear>
 	<licenses>
 		<license>
@@ -39,15 +39,9 @@
 	<properties>
 		<updateReleaseInfo>true</updateReleaseInfo>
 	</properties>
-	<repositories>
-		<repository>
-			<id>httl-repository</id>
-			<name>Httl Repository</name>
-			<url>http://httl.github.io/maven</url>
-		</repository>
-	</repositories>
+
 	<scm>
-		<url>http://httl.github.io</url>
+		<!-- <url>http://httl.github.io</url> -->
 		<connection>scm:git:https://github.com/httl/httl.git</connection>
 		<developerConnection>scm:git:git@github.com:httl/httl.git</developerConnection>
 	</scm>
