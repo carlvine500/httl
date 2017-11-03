@@ -84,11 +84,11 @@
 			<url>http://httl.github.io/maven</url>
 		</repository>
 	</repositories>-->
-	<scm>
+	<!--<scm>
 		<url>https://github.com/Softmotions/httl</url>
 		<connection>scm:git:https://github.com/Softmotions/httl.git</connection>
 		<developerConnection>scm:git:git@github.com:Softmotions/httl.git</developerConnection>
-	</scm>
+	</scm>-->
 	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/Softmotions/httl/issues</url>
