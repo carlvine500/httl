@@ -45,6 +45,7 @@
             </snapshots>
         </repository>
     </repositories>-->
+	<groupId>softmotions</groupId>
 	<artifactId>httl-parent</artifactId>
 	<version>1.0.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
