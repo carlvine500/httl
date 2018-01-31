@@ -15,45 +15,16 @@
  */
 package httl.ast;
 
-import httl.Node;
-import httl.Visitor;
-
-import java.io.IOException;
-import java.text.ParseException;
-
 /**
  * Expression. (API, Prototype, Immutable, ThreadSafe)
- * 
- * @see httl.spi.parsers.ExpressionParser#parse(String, int)
- * 
+ *
  * @author Liang Fei (liangfei0201 AT gmail DOT com)
+ * @see httl.spi.parsers.ExpressionParser#parse(String, int)
  */
-public abstract class Expression implements Node {
+public abstract class Expression extends AbstractNode {
 
-	private final int offset;
-	
-	private Expression parent;
-
-	public Expression(int offset) {
-		this.offset = offset;
-	}
-
-	public void accept(Visitor visitor) throws IOException, ParseException {
-		visitor.visit(this);
-	}
-
-	public int getOffset() {
-		return offset;
-	}
-
-	public Expression getParent() {
-		return parent;
-	}
-
-	public void setParent(Expression parent) {
-		if (this.parent != null)
-			throw new IllegalStateException("Can not modify parent.");
-		this.parent = parent;
-	}
+    public Expression(int offset) {
+        super(offset);
+    }
 
 }

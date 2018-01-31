@@ -15,66 +15,11 @@
  */
 package httl.spi.translators.templates;
 
-import httl.Context;
-import httl.Engine;
-import httl.Node;
-import httl.Resource;
-import httl.Template;
-import httl.ast.AddOperator;
-import httl.ast.AndOperator;
-import httl.ast.ArrayOperator;
-import httl.ast.AstVisitor;
-import httl.ast.BinaryOperator;
-import httl.ast.BitAndOperator;
-import httl.ast.BitNotOperator;
-import httl.ast.BitOrOperator;
-import httl.ast.BitXorOperator;
-import httl.ast.BreakDirective;
-import httl.ast.CastOperator;
-import httl.ast.ConditionOperator;
-import httl.ast.Constant;
-import httl.ast.DivOperator;
-import httl.ast.ElseDirective;
-import httl.ast.EntryOperator;
-import httl.ast.EqualsOperator;
-import httl.ast.Expression;
-import httl.ast.ForDirective;
-import httl.ast.GreaterEqualsOperator;
-import httl.ast.GreaterOperator;
-import httl.ast.IfDirective;
-import httl.ast.IndexOperator;
-import httl.ast.InstanceofOperator;
-import httl.ast.LeftShiftOperator;
-import httl.ast.LessEqualsOperator;
-import httl.ast.LessOperator;
-import httl.ast.ListOperator;
-import httl.ast.MacroDirective;
-import httl.ast.MethodOperator;
-import httl.ast.ModOperator;
-import httl.ast.MulOperator;
-import httl.ast.NegativeOperator;
-import httl.ast.NewOperator;
-import httl.ast.NotEqualsOperator;
-import httl.ast.NotOperator;
-import httl.ast.Operator;
-import httl.ast.OrOperator;
-import httl.ast.PositiveOperator;
-import httl.ast.RightShiftOperator;
-import httl.ast.SequenceOperator;
-import httl.ast.SetDirective;
-import httl.ast.Statement;
-import httl.ast.StaticMethodOperator;
-import httl.ast.SubOperator;
-import httl.ast.Text;
-import httl.ast.UnsignShiftOperator;
-import httl.ast.ValueDirective;
-import httl.ast.Variable;
+import httl.*;
+import httl.ast.*;
 import httl.spi.Compiler;
-import httl.spi.Converter;
-import httl.spi.Filter;
+import httl.spi.*;
 import httl.spi.Formatter;
-import httl.spi.Interceptor;
-import httl.spi.Switcher;
 import httl.spi.formatters.MultiFormatter;
 import httl.util.ByteCache;
 import httl.util.CharCache;
@@ -102,23 +47,13 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * CompileVisitor
- * 
+ *
  * @author @author Liang Fei (liangfei0201 AT gmail DOT com)
  */
 public class CompiledVisitor extends AstVisitor {
