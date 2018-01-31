@@ -18,15 +18,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.httl</groupId>
+		<groupId>softmotions</groupId>
 		<artifactId>httl-parent</artifactId>
-		<version>1.0.12</version>
+		<version>1.0.12-SNAPSHOT</version>
 	</parent>
 	<artifactId>httl-script</artifactId>
 	<packaging>jar</packaging>
 	<name>HTTL-Script</name>
 	<description>HTTL Script Integration.</description>
-	<url>http://httl.github.io</url>
+	<!--<url>http://httl.github.io</url>-->
 	<inceptionYear>2012</inceptionYear>
 	<licenses>
 		<license>
@@ -36,18 +36,21 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
-	<repositories>
+	<properties>
+		<updateReleaseInfo>true</updateReleaseInfo>
+	</properties>
+	<!--<repositories>
 		<repository>
 			<id>httl-repository</id>
 			<name>Httl Repository</name>
 			<url>http://httl.github.io/maven</url>
 		</repository>
-	</repositories>
-	<scm>
+	</repositories>-->
+	<!--<scm>
 		<url>http://httl.github.io</url>
 		<connection>scm:git:https://github.com/httl/httl.git</connection>
 		<developerConnection>scm:git:git@github.com:httl/httl.git</developerConnection>
-	</scm>
+	</scm>-->
 	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/httl/httl/issues</url>
@@ -73,7 +76,7 @@
 	</developers>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.httl</groupId>
+			<groupId>softmotions</groupId>
 			<artifactId>httl</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -121,36 +124,5 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<useSystemClassLoader>true</useSystemClassLoader>
-					<forkMode>once</forkMode>
-					<argLine>-server -Xms128m -Xmx512m -XX:PermSize=64m -XX:MaxPermSize=256m</argLine>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<addMavenDescriptor>true</addMavenDescriptor>
-						<index>true</index>
-						<manifest>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 </project>

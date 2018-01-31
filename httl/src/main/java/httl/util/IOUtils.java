@@ -15,7 +15,15 @@
  */
 package httl.util;
 
-import java.io.*;
+
+import httl.Resource;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,19 +85,23 @@ public class IOUtils {
         }
     }
 
-    public static List<String> readLines(Reader reader) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        try {
-            List<String> lines = new ArrayList<String>();
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                lines.add(line);
-            }
-            return lines;
-        } finally {
-            bufferedReader.close();
-        }
+    public static String readToString(Resource resource) throws IOException {
+        return (resource != null) ? readToString(resource.openReader()) : null;
     }
+
+	public static String readToString(Reader reader) throws IOException {
+		try {
+			StringBuilder buffer = new StringBuilder();
+			char[] buf = new char[8192];
+			int len = 0;
+			while ((len = reader.read(buf)) != -1) {
+				buffer.append(buf, 0, len);
+			}
+			return buffer.toString();
+		} finally {
+			reader.close();
+		}
+	}
 
     public static void copy(Reader in, Writer out) throws IOException {
         try {
